@@ -2,7 +2,7 @@
 from openai import OpenAI
 from backlinker_types import Customer
 import os
-
+import json
 
 default_prompt = """
 I provided you with the pure HTML of a website. The website is an article that is centered around a topic and has experts provide quotes to provide their opinions on the topics. There are usually several experts that are usually quoted with their Names, Positions, and Websites/Businesses. These experts usually have outbound links to their linkedin and or company website.
@@ -46,25 +46,22 @@ def scrape_with_LLM(html_content):
 
     )
     chatResponse = oai.chat.completions.create(
-            prompt=default_prompt + html_content + """ Return only the JSON object with no explanation or extra text. 
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
+                {"role": "user", "content": default_prompt + html_content + """ Return only the JSON object with no explanation or extra text. 
             {
                 [website_url]: {name: string (required), position: string (optional), linkedin: string (optional), businessName: string (optional)}
-            }""",
+            }""",}
+            ],
+            
+            response_format={ "type": "json_object" },
             temperature=0.4,
             max_tokens=32000,
         )
+    print(chatResponse)
     response = chatResponse.choices[0].message.content
-
-              try:
-                  json_data = json.loads(response)
-                  self.customers = [Customer(url, data['name'], data.get('position'), data.get('linkedin'), data.get('businessName')) for url, data in json_data.items()]
-              except json.JSONDecodeError:
-                  print(f"Invalid JSON response: {response}")
-                  self.customers = []
-          
-
-
-
-
-    
-
+    try:
+        json_data = json.loads(response)
+        return json_data
+    except json.JSONDecodeError:
+        print(f"Invalid JSON response: {response}")
