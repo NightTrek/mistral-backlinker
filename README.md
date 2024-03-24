@@ -30,3 +30,34 @@ The script expects a CSV file named articles.csv in the script directory, contai
 ```
 python3 full_email_export.py
 ```
+
+## Example outputs
+1. Extract quoted experts (leads) and their contact info from articles:
+```
+{
+  "https://bulldogdigitalmedia.co.uk/": {
+    "name": "Georgia O’Brien-Perry",
+    "position": "Digital PR Manager",
+    "linkedin": "https://www.linkedin.com/in/georgia-obrien-perry",
+    "businessName": "Bulldog Digital Media"
+  },
+  "https://www.lydiabagarozza.com/": {
+    "name": "Lydia Bagarozza",
+    "position": "Publicist",
+    "linkedin": "https://www.linkedin.com/in/lydia-bagarozza-9212b180",
+    "businessName": "Lydia Bagarozza LLC"
+  },
+  "https://www.novakidschool.com/": {
+    "name": "Dominique Harmse",
+    "position": "PR Manager",
+    "linkedin": "https://www.linkedin.com/in/dominique-harmse",
+    "businessName": "Novakid"
+  },
+  "https://www.emich.edu": {
+    "name": "Brittany Mobley",
+    "position": "Senior Media Relations Specialist",
+    "linkedin": "https://www.linkedin.com/in/brittanyemobley",
+    "businessName": "Eastern Michigan University"
+  }
+}
+```
