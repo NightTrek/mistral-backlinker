@@ -1,6 +1,6 @@
 from crewai import Agent, Task, Crew
 from crewai_tools import SerperDevTool, WebsiteSearchTool
-
+from backlinker_types import Customer
 
 google_search = SerperDevTool()
 web_rag_tool = WebsiteSearchTool()
@@ -22,11 +22,6 @@ company_researcher = Agent(
     tools=[web_rag_tool],
     
 )
-
-# Identify the customers role at their company  
-# Identify the customers SEO strategy
-# Identify the companies general mission and info and summerize it.
-
 
 
 Email_writter  = Agent(
@@ -101,15 +96,6 @@ We've talked with people who have spent $1000+ per month on link building compan
 )
 
 
-class Customer():
-    def __init__(self, email, position, name, website, existing_backlink_url, business_name, linkedin):
-        self.email = email
-        self.position = position
-        self.name = name
-        self.website = website
-        self.existing_backlink_url = existing_backlink_url
-        self.business_name = business_name
-        self.linkedin = linkedin
 
 daniel = Customer("daniel@nugbase.com", "COO", "Daniel Steigman", "https://nugbase.com", "https://pursuethepassion.com/why-are-you-passionate-about-global-health/", "Nugbase", "https://www.linkedin.com/in/nighttrek/")
 jamie = Customer("jamie@carepatron.com", "CEO", "Jamie Frew", "https://www.carepatron.com", "https://pursuethepassion.com/why-are-you-passionate-about-global-health/", "Carepatron", "https://www.linkedin.com/in/jamie-frew-b843618")
