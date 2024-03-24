@@ -1,13 +1,6 @@
 from crewai import Agent, Task, Crew
 from crewai_tools import SerperDevTool, WebsiteSearchTool
-from langchain_openai import ChatOpenAI
 
-from init import init
-
-init() # set the environment variables
-
-large = ChatOpenAI(model='mistralai/mistral-large')
-small = ChatOpenAI(model='mistralai/mistral-small')
 
 google_search = SerperDevTool()
 web_rag_tool = WebsiteSearchTool()
