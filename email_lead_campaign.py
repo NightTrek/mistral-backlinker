@@ -1,12 +1,15 @@
 from crewai import Task, Crew
 from backlinker_types import Customer
-from init import init
+
+import concurrent.futures
 
 from agents.email_writter import get_email_writter
 from agents.customer_researcher import get_customer_research_agent
 from agents.company_web_researcher import get_company_web_researcher
 from agents.backlinker_expert import get_backlinker_expert
 
+# init defined the python env variables manually since the .env file was having issues
+from init import init
 init()
 
 Email_writter = get_email_writter(Verbose=True)
@@ -56,12 +59,34 @@ def generate_lead_email_tasks(customer = jamie):
         )
     ]
 
+def sequential_lead_processing(customers = [jamie, daniel]):
+    for customer in customers:
+        tasks = generate_lead_email_tasks(customer)
+        Lead_generation_crew = Crew(
+            name=f"Lead Generation Crew for {customer.email}",
+            agents=[Customer_researcher, backlinker_expert, Email_writter],
+            tasks=tasks,
+            verbose=True,
+        )
+        Lead_generation_crew.kickoff()
 
-Lead_generation_crew = Crew(
-    name="Lead Generation Crew",
-    agents=[Customer_researcher, backlinker_expert, Email_writter],
-    tasks=generate_lead_email_tasks(),
-    verbose=2,
-)
 
-Lead_generation_crew.kickoff()
+
+def multi_threaded_crew_runner(customers = [jamie, daniel], num_threads = 4):
+    with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
+        futures = []
+        for customer in customers:
+            tasks = generate_lead_email_tasks(customer)
+            Lead_generation_crew = Crew(
+                name=f"Lead Generation Crew for {customer.email}",
+                agents=[Customer_researcher, backlinker_expert, Email_writter],
+                tasks=tasks,
+                verbose=True,
+            )
+            futures.append(executor.submit(Lead_generation_crew.kickoff))
+        
+        for future in concurrent.futures.as_completed(futures):
+            future.result()
+
+
+sequential_lead_processing()
