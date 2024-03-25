@@ -4,19 +4,19 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 from webdriver_manager.firefox import GeckoDriverManager
 
-def setup_driver():
+def setup_driver(driver_path):
     options = Options()
     options.add_argument("--headless")
     options.headless = True  # Enable headless mode
     # Automatically manage firefoxdriver
     # Set the path to the GeckoDriver executable
-    gecko_driver_path = "/usr/local/bin/geckodriver"
+    gecko_driver_path = driver_path
 
     driver = webdriver.Firefox(service=Service(executable_path=gecko_driver_path), options=options)
     return driver
 
-def get_cleaned_html(url):
-    driver = setup_driver()
+def get_cleaned_html(url, driver_path):
+    driver = setup_driver(driver_path)
     try:
         # Navigate to the URL
         driver.get(url)

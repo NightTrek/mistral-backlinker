@@ -8,3 +8,13 @@ class Customer():
         self.existing_backlink_url = existing_backlink_url
         self.business_name = business_name
         self.linkedin = linkedin
+
+    def to_str(self):
+        return f"""Customer details:
+    - Name: {self.name}
+    - Position: {self.position}
+    - Email: {self.email}
+    - Business name: {self.business_name}
+    - Website: {self.website}
+    - Existing backlink: {self.existing_backlink_url}
+    - LinkedIn profile: {self.linkedin}"""

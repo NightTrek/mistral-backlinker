@@ -14,6 +14,5 @@ def get_email_writter(Verbose=False):
         Your emails are consciece and to the point without using fancy language.
         You are carful with your words and dont use slang or jargon and to ensure that your emails are accurate and based on the customer research.
         """,
-        allow_delegation=True,
         verbose=Verbose,
     )

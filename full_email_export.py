@@ -1,8 +1,5 @@
-from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.service import Service
-from webdriver_manager.firefox import GeckoDriverManager
 from selenium.common.exceptions import WebDriverException
+from body_finder import setup_driver
 import pandas as pd
 import re
 import urllib.parse
@@ -34,11 +31,6 @@ def extract_and_process_links(driver, base_url):
     return results
 
 
-def setup_driver():
-    options = Options()
-    options.headless = True
-    driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
-    return driver
 
 def process_website(driver, url):
     try:
@@ -54,48 +46,33 @@ def process_website(driver, url):
         print(f"Error accessing {url}: {e}")
         return None
 
-# Setup Selenium WebDriver
-driver = setup_driver()
 
-# Load initial URLs from CSV
-articles_df = pd.read_csv('mini-articles.csv')
-# print("Loaded URLs:", articles_df['Website'].tolist())
+def generate_leads_from_csv(csv_file_path= "mini-articles.csv", output_file_path = "output.json", driver_path="/usr/local/bin/geckodriver"):
+    # Setup Selenium WebDriver
+    driver = setup_driver(driver_path)
 
+    # Load initial URLs from CSV
+    articles_df = pd.read_csv(csv_file_path)
+    # print("Loaded URLs:", articles_df['Website'].tolist())
 
-with open('output.json', 'w') as f:
-    url_to_leads_mapping = {}  # Initialize an empty dictionary
-    for _, row in articles_df.iterrows():
-        article_url = row['Website']
-        result = get_cleaned_html(article_url)
-        print(f"Processing webpage: {article_url}")
-        print(f"Extracted HTML body content length: {len(result)}")
-        print(f"Estimated token count: {round(len(result)/5)}")
-        leads_json_str = extract_leads_from_html(result) # returns a json object of leads
-        leads_python_obj = json.loads(leads_json_str)  
-        print(f"JSON: {leads_json_str}")
-        url_to_leads_mapping[article_url] = leads_python_obj                    
-        f.seek(0)  # Move the file pointer to the beginning of the file
-        json.dump(url_to_leads_mapping, f, indent=4)
-        f.truncate()  # Truncate the file to the current position
-        f.flush()  # Flush the buffer to ensure data is written to the file
-        os.fsync(f.fileno())  # Force write of file to disk
-        time.sleep(2)  # Wait for 2 second to prevent rate limiting issues
-                                      
-        # external_links = extract_and_process_links(driver, article_url)
-        # print(f"Found {len(external_links)} external links from {article_url}")
-        
-        # for link in external_links:
-        #     result = process_website(driver, link)
-        #     if result:
-        #         results.append(result)
-        #         results_df = pd.DataFrame(results)
-        #         results_df.to_csv('output_partial2.csv', index=False)
+    with open(output_file_path, 'w') as f:
+        url_to_leads_mapping = {}  # Initialize an empty dictionary
+        for _, row in articles_df.iterrows():
+            article_url = row['Website']
+            result = get_cleaned_html(article_url, driver_path)
+            print(f"Processing webpage: {article_url}")
+            print(f"Extracted HTML body content length: {len(result)}")
+            print(f"Estimated token count: {round(len(result)/5)}")
+            leads_json_str = extract_leads_from_html(result) # returns a json object of leads
+            leads_python_obj = json.loads(leads_json_str)  
+            print(f"JSON: {leads_python_obj}")
+            url_to_leads_mapping[article_url] = leads_python_obj                    
+            f.seek(0)  # Move the file pointer to the beginning of the file
+            json.dump(url_to_leads_mapping, f, indent=4)
+            f.truncate()  # Truncate the file to the current position
+            f.flush()  # Flush the buffer to ensure data is written to the file
+            os.fsync(f.fileno())  # Force write of file to disk
+            time.sleep(2)  # Wait for 2 second to prevent rate limiting issues
+                                        
 
-driver.quit()
-
-
-print(json.dumps(url_to_leads_mapping, indent=4))
-
-# Save results
-# results_df = pd.DataFrame(results)
-# results_df.to_csv('output.csv', index=False)
+    driver.quit()

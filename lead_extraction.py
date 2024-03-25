@@ -9,7 +9,8 @@ I will provide you with a list of all the ahref links from the website as well a
 
 I want you to return a JSON object where the keys are the website urls and the values are objects containing information like Name of the expert it's associated with, their position if applicable, their business name if applicable, and their linkedIn website if applicable.
 {
-    [website_url]: {name: string (required), position: string (optional), linkedin: string (optional), businessName: string (optional)}
+    name: string (required), position: string (required), linkedin: string (required), business_name: string (required), website_url: string (required)
+        
 }
 
 Please only return website URLs that are directly associated with experts mentioned on the webpage. All other website urls are irrelevant and can be excluded from the json object.
@@ -48,8 +49,14 @@ def extract_leads_from_html(html_content):
                 {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
                 {"role": "user", "content": default_prompt + html_content + """ Return only the JSON object with no explanation or extra text. 
             {
-                [website_url]: {name: string (required), position: string (optional), linkedin: string (optional), businessName: string (optional)}
-            }""",}
+                name: string (required),
+                position: string (required),
+                linkedin: string (required),
+                business_name: string (required),
+                website_url: string (required)
+                 
+            }
+                 """,}
             ],
             
             response_format={ "type": "json_object" },
