@@ -39,7 +39,7 @@ The default expected instal location is
 /usr/local/bin/geckodriver
 ```
 
-you can find the driver (here)[https://github.com/mozilla/geckodriver/releases]
+You can find the driver [here](https://github.com/mozilla/geckodriver/releases)
 
 ## Running Instructions
 
