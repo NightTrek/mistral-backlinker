@@ -9,7 +9,10 @@ def setup_driver():
     options.add_argument("--headless")
     options.headless = True  # Enable headless mode
     # Automatically manage firefoxdriver
-    driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
+    # Set the path to the GeckoDriver executable
+    gecko_driver_path = "/usr/local/bin/geckodriver"
+
+    driver = webdriver.Firefox(service=Service(executable_path=gecko_driver_path), options=options)
     return driver
 
 def get_cleaned_html(url):
