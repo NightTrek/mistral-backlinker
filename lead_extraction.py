@@ -39,11 +39,11 @@ Do this without writing any code. I just want you to look at the HTML of the web
 def extract_leads_from_html(html_content):
     oai = OpenAI(
         api_key=os.environ["OPENAI_API_KEY"],
-        api_base=os.environ["OPENAI_API_BASE"],
-        model=os.environ["OPENAI_MODEL_NAME"],
-
+        base_url=os.environ["OPENAI_API_BASE"],
     )
+
     chatResponse = oai.chat.completions.create(
+            model=os.environ["OPENAI_MODEL_NAME"],
             messages=[
                 {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
                 {"role": "user", "content": default_prompt + html_content + """ Return only the JSON object with no explanation or extra text. 
@@ -59,7 +59,7 @@ def extract_leads_from_html(html_content):
     print(chatResponse)
     response = chatResponse.choices[0].message.content
     try:
-        json_data = json.loads(response)
+        json_data = json.dumps(response)
         return json_data
     except json.JSONDecodeError:
         print(f"Invalid JSON response: {response}")

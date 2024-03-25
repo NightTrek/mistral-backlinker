@@ -1,7 +1,7 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
+from webdriver_manager.firefox import GeckoDriverManager
 from selenium.common.exceptions import WebDriverException
 import pandas as pd
 import re
@@ -37,7 +37,7 @@ def extract_and_process_links(driver, base_url):
 def setup_driver():
     options = Options()
     options.headless = True
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
     return driver
 
 def process_website(driver, url):
@@ -59,7 +59,7 @@ driver = setup_driver()
 
 # Load initial URLs from CSV
 articles_df = pd.read_csv('articles.csv')
-print("Loaded URLs:", articles_df['Website'].tolist())
+# print("Loaded URLs:", articles_df['Website'].tolist())
 
 results = []
 
@@ -73,8 +73,10 @@ for _, row in articles_df.iterrows():
     print(f"Estimated token count: {round(len(result)/5)}")
     leads_json_str = extract_leads_from_html(result) # returns a json object of leads
     leads_python_obj = json.loads(leads_json_str)  
+    print(f"JSON: {leads_json_str}")
     url_to_leads_mapping[article_url] = leads_python_obj
 
+    
     # external_links = extract_and_process_links(driver, article_url)
     # print(f"Found {len(external_links)} external links from {article_url}")
     

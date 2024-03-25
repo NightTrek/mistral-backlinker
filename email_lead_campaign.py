@@ -1,6 +1,11 @@
 from crewai import Agent, Task, Crew
 from crewai_tools import SerperDevTool, WebsiteSearchTool
 from backlinker_types import Customer
+from init import init
+
+init()
+
+
 
 google_search = SerperDevTool()
 web_rag_tool = WebsiteSearchTool()
@@ -116,6 +121,12 @@ def build_task_list(customers = [daniel, jamie]):
                         - Existing backlink: {customer.existing_backlink_url}
                         - LinkedIn profile: {customer.linkedin}
 
+                        Available Agents:
+                        - Customer_researcher
+                        - Company_researcher
+                        - Product_expert
+
+                        
                         Step 1 Ask query the Research Agent
                         Instructions:
                         Identify more details about the customer's role at their company and what their company does. Look into their current SEO strategy and identify areas where https://www.backlinker.ai/ could help optimize it. Provide this information to be used in the email.
