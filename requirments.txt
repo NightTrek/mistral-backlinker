@@ -1,0 +1,7 @@
+crewai
+selenium
+pandas
+urllib3
+openai
+beautifulsoup4
+webdriver-manager
