@@ -89,5 +89,3 @@ def multi_threaded_crew_runner(customers = [jamie], num_threads = 4):
         for future in concurrent.futures.as_completed(futures):
             future.result()
 
-
-sequential_lead_processing()
