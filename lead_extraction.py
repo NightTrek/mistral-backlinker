@@ -2,6 +2,9 @@ from openai import OpenAI
 import os
 import json
 
+from init import init
+init()
+
 default_prompt = """
 I provided you with the pure HTML of a website. The website is an article that is centered around a topic and has experts provide quotes to provide their opinions on the topics. There are usually several experts that are usually quoted with their Names, Positions, and Websites/Businesses. These experts usually have outbound links to their linkedin and or company website.
 
